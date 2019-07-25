@@ -18,6 +18,11 @@ public class Level : MonoBehaviour
         {
             SetXp(10);
         }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            SetXpFixed(15);
+        }
     }
 
     private void SetXp(int xp)
@@ -25,14 +30,36 @@ public class Level : MonoBehaviour
         currentXp += xp;
         if(currentXp >= nextXp)
         {
-            nextXp = nextXp * 1.25f;
+            currentXp -= nextXp;
+            nextXp *= 1.25f;
+            nextXp = Mathf.Round(nextXp);
             currentLevel++;
-            currentXp = 0f;
         }
         UpdateUi();
     }
 
+    private void SetXpFixed(int xp)
+    {
+        float[] nextXp = new float[10] { 50, 80, 130, 160, 200, 250, 300, 350, 400, 450};
+
+        currentXp += xp;
+
+        if (currentXp >= nextXp[currentLevel - 1])
+        {
+            currentXp-= nextXp[currentLevel - 1];
+            currentLevel++;
+        }
+        UpdateUiFixed(nextXp[currentLevel - 1]);
+    }
+
     private void UpdateUi()
+    {
+        txtCurrentLevel.text = currentLevel.ToString();
+        txtCurrentXp.text = currentXp.ToString();
+        txtNextXP.text = nextXp.ToString();
+    }
+
+    private void UpdateUiFixed(float nextXp)
     {
         txtCurrentLevel.text = currentLevel.ToString();
         txtCurrentXp.text = currentXp.ToString();
